@@ -38,6 +38,23 @@ class _HomePageState extends State<HomePage> {
   // 9) Variável que executa um método que controla um texto
   var newTaskController = TextEditingController();
 
+  // 10) Método que adicionará um item na lista
+  void add() {
+    // 10) Se não tiver texto, não executa o add
+    if (newTaskController.text.isEmpty) return;
+
+    setState(() {
+      widget.items.add(
+        Item(
+          title: newTaskController.text,
+          done: false,
+        ),
+      );
+      // 10) Após adicionar um item, o texto escrito no form se apagará
+      newTaskController.clear();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +101,12 @@ class _HomePageState extends State<HomePage> {
             },
           );
         },
+      ),
+      // 10) Adiciona botão flutuante na tela
+      floatingActionButton: FloatingActionButton(
+        onPressed: add,
+        child: Icon(Icons.add),
+        backgroundColor: Colors.pink,
       ),
     );
   }
