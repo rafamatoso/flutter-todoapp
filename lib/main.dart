@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'model/item.dart';
 
 // função main que retorna void
 void main() => runApp(MyApp());
@@ -18,22 +19,37 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  var items = new List<Item>();
+
+  HomePage() {
+    items = [];
+    items.add(Item(title: "Item 1", done: false));
+    items.add(Item(title: "Item 2", done: true));
+    items.add(Item(title: "Item 3", done: false));
+  }
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Renderiza um AppBar na página
       appBar: AppBar(
-        // Renderiza um AppBar na página
-        leading: Icon(Icons.question_answer),
         title: Text("ToDo List"),
-        actions: <Widget>[
-          Icon(Icons.plus_one), // Renderiza um ícone de coma na AppBar
-        ],
       ),
-      body: Container(
-        child: Center(
-          child: Text("Olá mundo!"),
-        ),
+      // O método .builder() renderiza o ListView em tempo de execução, sobre demanda, dando mais eficiência e melhorando a performance do elemento
+      body: ListView.builder(
+        // O ListView acessará os itens de acordo com a quantidade contida nele próprio
+        itemCount: widget.items.length,
+        // Função que será responsável pela construção dos itens na tela (Como deve ser construido os itens? Como desenho? O que faço?)
+        itemBuilder: (BuildContext context, int index) {
+          // Retornará o texto na Tela da App
+          return Text(widget.items[index].title);
+        },
       ),
     );
   }
