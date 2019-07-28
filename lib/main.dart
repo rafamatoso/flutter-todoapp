@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
   var newTaskController = TextEditingController();
 
   // 10) Método que adicionará um item na lista
+  // 14) Toda vez que um item for adicionado, o método save() será usado
   void add() {
     // 10) Se não tiver texto, não executa o add
     if (newTaskController.text.isEmpty) return;
@@ -54,12 +55,16 @@ class _HomePageState extends State<HomePage> {
       );
       // 10) Após adicionar um item, o texto escrito no form se apagará
       newTaskController.clear();
+      save();
     });
   }
 
+  // 10) Método que removerá um item da lista
+  // 14) Toda vez que um item for removido, o método save() será usado
   void remove(int index) {
     setState(() {
       widget.items.removeAt(index);
+      save();
     });
   }
 
@@ -78,6 +83,12 @@ class _HomePageState extends State<HomePage> {
         widget.items = result;
       });
     }
+  }
+
+  // 14) Métodd que persistirá as informações no Shared Preferences
+  save() async {
+    var preferences = await SharedPreferences.getInstance();
+    await preferences.setString('data', jsonEncode(widget.items));
   }
 
   // 13) Após a criação do método load, devemos criar um construtor default e chamar o método load para ler os itens da lista
@@ -127,8 +138,10 @@ class _HomePageState extends State<HomePage> {
                 // 7) Semelhante ao console.log() do js
                 // print(value);
                 // 8) O setState realiza a operação de ouvir a mudança de estado e aplicá-la (programação reativa) só aonde aconteceu a mudança.
+                // 14) Toda vez que um item for trocado, o método save() será usado
                 setState(() {
                   item.done = value;
+                  save();
                 });
               },
             ),
