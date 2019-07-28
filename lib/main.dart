@@ -55,6 +55,12 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void remove(int index) {
+    setState(() {
+      widget.items.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,22 +88,35 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (BuildContext context, int index) {
           // 7) Criado para desestruturar a chamada direto no return, dessa forma poderemos chamar a variável item por toda a app
           final item = widget.items[index];
-          // 6) Retornará o texto na Tela da App
-          return CheckboxListTile(
-            // 7) Mostra o título
-            title: Text(item.title),
-            // 7) Tem que apresentar uma chave única
+          // 11) Dismissible: Cria efeito de arrastar item para o lado
+          return Dismissible(
+            // 6) Retornará o texto na Tela da App
+            child: CheckboxListTile(
+              // 7) Mostra o título
+              title: Text(item.title),
+              // 7) Tem que apresentar uma chave única
+              key: Key(item.title),
+              // 7) Um booleano, true ou false
+              value: item.done,
+              // 7) Ao clicar, mudará valor
+              onChanged: (value) {
+                // 7) Semelhante ao console.log() do js
+                // print(value);
+                // 8) O setState realiza a operação de ouvir a mudança de estado e aplicá-la (programação reativa) só aonde aconteceu a mudança.
+                setState(() {
+                  item.done = value;
+                });
+              },
+            ),
+            // 11) Dismissible também precisa de uma Key
             key: Key(item.title),
-            // 7) Um booleano, true ou false
-            value: item.done,
-            // 7) Ao clicar, mudará valor
-            onChanged: (value) {
-              // 7) Semelhante ao console.log() do js
-              // print(value);
-              // 8) O setState realiza a operação de ouvir a mudança de estado e aplicá-la (programação reativa) só aonde aconteceu a mudança.
-              setState(() {
-                item.done = value;
-              });
+            // 11) Background quando o efeito do Dismissible estiver ativo
+            background: Container(
+              color: Colors.indigo.withOpacity(0.2),
+            ),
+            // Método que executará uma ação quando o Dismissible for executado
+            onDismissed: (direction) {
+              remove(index);
             },
           );
         },
