@@ -35,12 +35,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // 9) Variável que executa um método que controla um texto
+  var newTaskController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // Renderiza um AppBar na página
       appBar: AppBar(
-        title: Text("ToDo List"),
+        // 9) TextFormField = Caixa de entrada de texto
+        title: TextFormField(
+          // 9) O TextFormField terá um controlador de texto (value, clear e etc...)
+          controller: newTaskController,
+          // 9) Define qual o tipo de entrada o teclado do celular aceitará e mostrará (phone, email, text...)
+          keyboardType: TextInputType.text,
+          style: TextStyle(color: Colors.white, fontSize: 18),
+          // 9) Mostra um testo decorativo no Form
+          decoration: InputDecoration(
+            labelText: "Nova Tarefa",
+            labelStyle: TextStyle(color: Colors.white),
+          ),
+        ),
       ),
       // 6) O método .builder() renderiza o ListView em tempo de execução, sobre demanda, dando mais eficiência e melhorando a performance do elemento
       body: ListView.builder(
