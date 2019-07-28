@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'model/item.dart';
 
 // Função main que retorna void
@@ -25,9 +27,9 @@ class HomePage extends StatefulWidget {
 
   HomePage() {
     items = [];
-    items.add(Item(title: "Banana", done: false));
-    items.add(Item(title: "Abacate", done: true));
-    items.add(Item(title: "Laranja", done: false));
+    // items.add(Item(title: "Banana", done: false));
+    // items.add(Item(title: "Abacate", done: true));
+    // items.add(Item(title: "Laranja", done: false));
   }
 
   @override
@@ -59,6 +61,28 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       widget.items.removeAt(index);
     });
+  }
+
+  // 13) Tudo que depende de um I/O não é em tempo real, ele depende do conceito de Promises (promessas)
+  Future load() async {
+    // O await funciona como um controlador de fila, onde ele pede para que algo espere até que outra coisa
+    // seja executada, no caso o término do SharedPreferences.getInstance();
+    var preferences = await SharedPreferences.getInstance();
+    var data = preferences.getString('data');
+
+    if (data != null) {
+      // 13) Iterable é uma lista genérica que reeceberá um json
+      Iterable decoded = jsonDecode(data);
+      List<Item> result = decoded.map((x) => Item.fromJson(x)).toList();
+      setState(() {
+        widget.items = result;
+      });
+    }
+  }
+
+  // 13) Após a criação do método load, devemos criar um construtor default e chamar o método load para ler os itens da lista
+  _HomePageState() {
+    load();
   }
 
   @override
