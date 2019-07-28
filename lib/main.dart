@@ -25,9 +25,9 @@ class HomePage extends StatefulWidget {
 
   HomePage() {
     items = [];
-    items.add(Item(title: "Item 1", done: false));
-    items.add(Item(title: "Item 2", done: true));
-    items.add(Item(title: "Item 3", done: false));
+    items.add(Item(title: "Banana", done: false));
+    items.add(Item(title: "Abacate", done: true));
+    items.add(Item(title: "Laranja", done: false));
   }
 
   @override
@@ -61,7 +61,11 @@ class _HomePageState extends State<HomePage> {
             // 7) Ao clicar, mudará valor
             onChanged: (value) {
               // 7) Semelhante ao console.log() do js
-              print(value);
+              // print(value);
+              // 8) O setState realiza a operação de ouvir a mudança de estado e aplicá-la (programação reativa) só aonde aconteceu a mudança.
+              setState(() {
+                item.done = value;
+              });
             },
           );
         },
